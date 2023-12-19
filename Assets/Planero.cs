@@ -52,21 +52,39 @@ public class Planero : MonoBehaviour
         GoapState initial = new GoapState();
         initial.worldState = new WorldState()
         {
-            playerHP = 88,
-            values = new Dictionary<string, bool>()
+	        _inSightEnemies = 0,
+	        _maxLife = 100,
+	        _life = 100,
+	        _treasure = false,
+	        _weapon = null
         };
 
-        initial.worldState.values = observedState; //le asigno los valores actuales, conseguidos antes
-		initial.worldState.values["doorOpen"] = false; //agrego el bool "doorOpen"
+        //initial.worldState.values = observedState; //le asigno los valores actuales, conseguidos antes
+		//initial.worldState.values["doorOpen"] = false; //agrego el bool "doorOpen"
 
-        foreach (var item in initial.worldState.values)
-        {
-            Debug.Log(item.Key + " ---> " + item.Value);
-        }
+		
+		Debug.Log("InSightEnemies" + " ---> " + initial.worldState._inSightEnemies);
+		Debug.Log("MaxLife" + " ---> " + initial.worldState._maxLife);
+		Debug.Log("Life" + " ---> " + initial.worldState._life);
+		Debug.Log("Treasure" + " ---> " + initial.worldState._treasure);
+		Debug.Log("_weapon" + " ---> " + initial.worldState._weapon);
+		
+        //foreach (var item in initial.worldState.values)
+        //{
+        //    Debug.Log(item.Key + " ---> " + item.Value);
+        //}
 
         GoapState goal = new GoapState();
+        goal.worldState = new WorldState()
+        {
+			_inSightEnemies = 0,
+			//_life = IsHeal(goal), //Tiene que ser mas que la mitad de maxlife
+			_treasure = true,
+			//_weapon =  Kind.normal//Tiene que ser
+        };
+        
         //goal.values["has" + ItemType.Key.ToString()] = true;
-        goal.worldState.values["has" + ItemType.PastaFrola.ToString()] = true;
+        //goal.worldState.values["has" + ItemType.PastaFrola.ToString()] = true;
         //goal.values["has"+ ItemType.Mace.ToString()] = true;
         //goal.values["dead" + ItemType.Entity.ToString()] = true;}
 
@@ -122,6 +140,12 @@ public class Planero : MonoBehaviour
 		}
 	}
 
+
+    private bool IsHeal(GoapState state)
+    {
+	    return state.worldState._life> (state.worldState._maxLife *.5f);
+    }
+    
     private List<GoapAction> CreatePossibleActionsList()
     {
 	     return new List<GoapAction>()
