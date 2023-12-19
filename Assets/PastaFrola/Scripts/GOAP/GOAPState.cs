@@ -92,9 +92,9 @@ public struct WorldState
             _isHealthy = this._isHealthy,
             _inSightEnemies = this._inSightEnemies,
             _treasure = this._treasure,
+            _hasWeapon =  this._hasWeapon
             //_weapon = this._weapon,
             //_weaponRarityOkey = this._weaponRarityOkey,
-            
         };
     }
 }

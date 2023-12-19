@@ -18,20 +18,33 @@ public class Goap : MonoBehaviour
             curr =>
             {
                 if (watchdog == 0)
+                {
+                    Debug.Log("Dale flaco");
                     return Enumerable.Empty<AStarNormal<GoapState>.Arc>();
+                }
                 else
                     watchdog--;
-
+                
                 //en este Where se evaluan las precondiciones, al ser un diccionario de <string,bool> solo se chequea que todas las variables concuerdes
                 //En caso de ser un Func<...,bool> se utilizaria ese func de cada estado para saber si cumple o no
-                return actions.Where(action => action.preconditions.All(kv => kv.In(curr.worldState.values)))
+                return actions//.Where(action => action.preconditions.All(kv => kv.In(curr.worldState.values)))
                               .Where(a => a.Preconditions(curr)) // Agregue esto para chequear las precondiuciones puestas  en el Func, Al final deberia quedar solo esta
                               .Aggregate(new FList<AStarNormal<GoapState>.Arc>(), (possibleList, action) =>
                               {
+                                  
+                                  Debug.Log("-----------START-------------------" );
+                                  Debug.Log("ACTIONS " + action.Name );
+                                  Debug.Log("ACTIONS PRE " + action.Preconditions(curr) );
+                                  Debug.Log("CURRENT STATE " + curr );
+                                  
                                   var newState = new GoapState(curr);
+                                  
+                                  
                                   newState = action.Effects(newState); // se aplican lso effectos del Func
                                   newState.generatingAction = action;
                                   newState.step = curr.step+1;
+                                  
+                                  Debug.Log("-------------NEXT-------------" );
                                   return possibleList + new AStarNormal<GoapState>.Arc(newState, action.Cost);
                               });
             });
