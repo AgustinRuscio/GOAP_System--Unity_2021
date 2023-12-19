@@ -3,7 +3,6 @@ using IA2;
 using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public enum Actions
@@ -89,7 +88,7 @@ public class Player : MonoBehaviour
     private void Heal(Entity us, Item other)
     {
         if(other != _target) return;
-        //Curarme
+        //Hacer animacion
         _fsm.Feed(Actions.NextStep);
     }
     
@@ -97,9 +96,6 @@ public class Player : MonoBehaviour
     private Transform[] _hidePos;
 
     private Transform _escapeTarget;
-    
-    [SerializeField]
-    private Transform _healPosition;
     
     private void Start()
     {
@@ -145,7 +141,7 @@ public class Player : MonoBehaviour
 
         heal.OnEnter += a =>
         {
-            _ent.GoTo(_healPosition.position);
+            _ent.GoTo(_target.transform.position);
             _ent.OnHitItem += Heal;
         };
 

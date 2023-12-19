@@ -6,10 +6,10 @@ public enum ItemType
 	Invalid,
 	Key,
 	Door,
-	Entity,
 	Mace,
 	PastaFrola,
 	//----Nuevos
+	Entity,
 	Treasure,
 	Weapon,
 	WeaponChest,

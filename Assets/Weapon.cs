@@ -4,19 +4,17 @@ using Random = UnityEngine.Random;
 
 public class Weapon : MonoBehaviour
 {
-    private Kind _kind;
+    private Rarity _rarity;
 
-    public Kind Type => _kind;
+    public Rarity Rarity => _rarity;
 
-    public void SetKind(Kind _newKind) => _kind = _newKind;
+    public void SetRarity(Rarity newRarity) => _rarity = newRarity;
 }
 
-public enum Kind
+public enum Rarity
 {
-    Mull,
     normal, 
     rare,
     legendary,
     ultraMax
-    
 }

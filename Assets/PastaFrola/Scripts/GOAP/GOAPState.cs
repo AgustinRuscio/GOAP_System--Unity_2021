@@ -65,18 +65,21 @@ public struct WorldState
 
     public float _life;
     public float _maxLife;
-
+    public bool _isHealthy;
+    
     public int _inSightEnemies;
 
     public bool _treasure;
+    public bool _hasWeapon;
 
-    public Weapon _weapon;
+    //public Weapon _weapon;
+    //public bool _weaponRarityOkey;
     
     //MUY IMPORTANTE TENER UN CLONE PARA NO TENER REFENCIAS A LO VIEJO
 
-    public Kind SetRandomRarity()
+    public Rarity SetRandomRarity()
     {
-        Kind[] allKinds = (Kind[])Enum.GetValues(typeof(Kind));
+        Rarity[] allKinds = (Rarity[])Enum.GetValues(typeof(Rarity));
         return allKinds[UnityEngine.Random.Range(1, allKinds.Length)];
     }
     public WorldState Clone()
@@ -84,7 +87,14 @@ public struct WorldState
         return new WorldState()
         {
             playerHP = this.playerHP,
-            values = this.values.ToDictionary(kv => kv.Key, kv => kv.Value)
+            values = this.values.ToDictionary(kv => kv.Key, kv => kv.Value),
+            _life = this._life,
+            _isHealthy = this._isHealthy,
+            _inSightEnemies = this._inSightEnemies,
+            _treasure = this._treasure,
+            //_weapon = this._weapon,
+            //_weaponRarityOkey = this._weaponRarityOkey,
+            
         };
     }
 }
