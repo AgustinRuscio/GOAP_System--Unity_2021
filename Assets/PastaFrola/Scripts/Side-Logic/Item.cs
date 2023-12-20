@@ -13,7 +13,8 @@ public enum ItemType
 	Treasure,
 	Weapon,
 	WeaponChest,
-	Heal
+	Heal,
+	Escape
 }
 
 public class Item : MonoBehaviour

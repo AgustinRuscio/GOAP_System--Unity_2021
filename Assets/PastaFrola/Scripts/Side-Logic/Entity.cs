@@ -120,8 +120,8 @@ public class Entity : MonoBehaviour
             OnHitWall(this, col.collider.transform);
         else
         {
-            var item = col.collider.GetComponentInParent<Item>();
-            if (item && item.transform.parent != inventory)
+            var item = col.collider.GetComponent<Item>();
+            if (item && item.transform != inventory)
                 OnHitItem(this, item);
         }
     }

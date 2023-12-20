@@ -31,11 +31,10 @@ public class Goap : MonoBehaviour
                               .Where(a => a.Preconditions(curr)) // Agregue esto para chequear las precondiuciones puestas  en el Func, Al final deberia quedar solo esta
                               .Aggregate(new FList<AStarNormal<GoapState>.Arc>(), (possibleList, action) =>
                               {
-                                  
                                   Debug.Log("-----------START-------------------" );
-                                  Debug.Log("ACTIONS " + action.Name );
-                                  Debug.Log("ACTIONS PRE " + action.Preconditions(curr) );
-                                  Debug.Log("CURRENT STATE " + curr );
+                                  Debug.Log("Current Action " + action.Name);
+                                  Debug.Log("Pre condiciones actuales " + curr);
+                                  
                                   
                                   var newState = new GoapState(curr);
                                   
@@ -44,6 +43,7 @@ public class Goap : MonoBehaviour
                                   newState.generatingAction = action;
                                   newState.step = curr.step+1;
                                   
+                                  Debug.Log("Efectos actuales " + action.Effects(newState));
                                   Debug.Log("-------------NEXT-------------" );
                                   return possibleList + new AStarNormal<GoapState>.Arc(newState, action.Cost);
                               });

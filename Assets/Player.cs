@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     {
         //Aca pongo lo que tiene que pasar si aggaro el arma. Lo que pense que iab en el cofre lo ejecuto aca
         
-        Debug.Log("Pick Up",other.gameObject);
+        Debug.Log("Pick Up  + A",other.gameObject);
         
         if(other != _target) return;
         
@@ -92,11 +92,6 @@ public class Player : MonoBehaviour
         _fsm.Feed(Actions.NextStep);
     }
     
-    [SerializeField]
-    private Transform[] _hidePos;
-
-    private Transform _escapeTarget;
-    
     private void Start()
     {
        _ent = GetComponent<Entity>();
@@ -112,7 +107,7 @@ public class Player : MonoBehaviour
         
         var pickUp = new State<Actions>("PickUp");
         var fight = new State<Actions>("Fight");
-        var escape = new State<Actions>("Hide");
+        var escape = new State<Actions>("Escape");
         var heal = new State<Actions>("Heal");
 
         bridgeStep.OnEnter += a =>
@@ -151,28 +146,34 @@ public class Player : MonoBehaviour
         pickUp.OnEnter += a => 
         {
             _ent.GoTo(_target.transform.position);
+            Debug.Log("Entro a pick up");
             _ent.OnHitItem += PickUp; //On hit item es lo que hago caundo obtengo el item
         };
-        
-        pickUp.OnExit += a => _ent.OnHitItem -= PickUp;
+
+        pickUp.OnExit += a =>
+        {
+            Debug.Log("salgo de pick up");
+            _ent.OnHitItem -= PickUp;
+        };
 
         escape.OnEnter += a =>
         {
-            int rand = Random.Range(0, _hidePos.Length);
-
-            _escapeTarget = _hidePos[rand];
-            
-            _ent.GoTo(_escapeTarget.position);
-
-            if (Vector3.Distance(transform.position, _escapeTarget.position) <= 2f)
+            _ent.GoTo(_target.transform.position);
+            Debug.Log("entro a escape");
+            if (Vector3.Distance(transform.position, _target.transform.position) <= 2f)
                 _fsm.Feed(Actions.NextStep);
+        };
+
+        escape.OnExit += a =>
+        {
+            Debug.Log("salgo de escape");
         };
 
         escape.OnUpdate += () =>
         {
             Debug.Log("Hiding");
             
-            if (Vector3.Distance(transform.position, _escapeTarget.position) <= 2f)
+            if (Vector3.Distance(transform.position, _target.transform.position) <= 2f)
                 _fsm.Feed(Actions.NextStep);
         };
         
@@ -209,6 +210,7 @@ public class Player : MonoBehaviour
 
     public void ExecutePlan(List<Tuple<Actions, Item>> plan) {
         _plan = plan;
+        Debug.Log("Plan Count " +_plan.Count() );
         _fsm.Feed(Actions.NextStep);
     }
     private void Update()
