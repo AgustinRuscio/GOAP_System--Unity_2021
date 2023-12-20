@@ -33,6 +33,8 @@ public class Entity : MonoBehaviour
 	Waypoint _gizmoRealTarget;
 	IEnumerable<Waypoint> _gizmoPath;
 
+	public Animator _animator;
+	
     #region GETTERS & SETTERS
     public IEnumerable<Item> items { get { return _items; } }
 

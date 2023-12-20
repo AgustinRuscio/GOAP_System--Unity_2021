@@ -55,6 +55,7 @@ public class Item : MonoBehaviour
 			foreach(var it in ent.RemoveAllitems())
 				it.transform.parent = null;
 		}
+		ent._animator.SetTrigger("Death");
 		Destroy(gameObject);
 	}
 

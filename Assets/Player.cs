@@ -62,6 +62,8 @@ public class Player : MonoBehaviour
             Debug.Log("Treasure",other.gameObject);
         }
         
+        
+        _amimator.SetTrigger("Jump");
         _ent.AddItem(other);
         _fsm.Feed(Actions.NextStep);
     }
