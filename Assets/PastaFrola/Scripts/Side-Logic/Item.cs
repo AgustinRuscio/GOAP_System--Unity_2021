@@ -26,6 +26,8 @@ public class Item : MonoBehaviour
 	public void OnInventoryAdd()
     {
 		Destroy(GetComponent<Rigidbody>());
+		GetComponent<Collider>().enabled = false;
+		
 		_insideInventory = true;
 		if(_wp)
 			_wp.nearbyItems.Remove(this);
@@ -34,6 +36,8 @@ public class Item : MonoBehaviour
 	public void OnInventoryRemove()
     {
 		gameObject.AddComponent<Rigidbody>();
+		
+		GetComponent<Collider>().enabled = true;
 		_insideInventory = false;
 	}
 

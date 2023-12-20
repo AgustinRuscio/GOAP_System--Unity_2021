@@ -27,10 +27,18 @@ public class Player : MonoBehaviour
     
     IEnumerable<Tuple<Actions, Item>> _plan;
 
-    public Weapon _weaponPrefab;
-
-    public Weapon _currentWeapon;
+    [SerializeField]
+    private Item _weaponPrefab;
     
+    [SerializeField]
+    private Transform _inventoryTwo;
+    
+    private Item _currentWeapon;
+    
+    [SerializeField]
+    private Animator _amimator;
+
+    public CameraTarget acamaraaa;
     private void PickUp(Entity us, Item other)
     {
         //Aca pongo lo que tiene que pasar si aggaro el arma. Lo que pense que iab en el cofre lo ejecuto aca
@@ -39,21 +47,22 @@ public class Player : MonoBehaviour
         
         if(other != _target) return;
         
-        _ent.AddItem(other);
         
         if (other.type == ItemType.WeaponChest)
         {
-            var newWeapon = Instantiate(_weaponPrefab, transform);
+            var newWeapon = Instantiate(_weaponPrefab, _inventoryTwo.position, _inventoryTwo.rotation);
             _currentWeapon = newWeapon;
+            _currentWeapon.transform.parent = _inventoryTwo;
+            
             Debug.Log("Weapon",other.gameObject);
         }
         else
         {
+            
             Debug.Log("Treasure",other.gameObject);
         }
         
-        other.OnInventoryAdd();
-        
+        _ent.AddItem(other);
         _fsm.Feed(Actions.NextStep);
     }
 
@@ -79,7 +88,7 @@ public class Player : MonoBehaviour
         }
         
         other.Kill();
-        
+        _amimator.SetTrigger("Punch");
         Destroy(_ent.Removeitem(weapon).gameObject);
         
         _fsm.Feed(Actions.NextStep);
@@ -91,20 +100,20 @@ public class Player : MonoBehaviour
         //Hacer animacion
         _fsm.Feed(Actions.NextStep);
     }
-    
+
     private void Start()
     {
-       _ent = GetComponent<Entity>();
+        _ent = GetComponent<Entity>();
 
         #region FSM
-        
+
         var any = new State<Actions>("any");
 
         var idle = new State<Actions>("idle");
         var bridgeStep = new State<Actions>("planStep");
         var fail = new State<Actions>("Fail");
         var success = new State<Actions>("success");
-        
+
         var pickUp = new State<Actions>("PickUp");
         var fight = new State<Actions>("Fight");
         var escape = new State<Actions>("Escape");
@@ -113,28 +122,37 @@ public class Player : MonoBehaviour
         bridgeStep.OnEnter += a =>
         {
             var step = _plan.FirstOrDefault();
-            
+
             if (step == null)
+            {
                 _fsm.Feed(Actions.Success);
-            
+                return;
+            }
+
             _plan = _plan.Skip(1);
             var oldTarget = _target;
             _target = step.Item2;
-            
+
             if (!_fsm.Feed(step.Item1))
                 _target = oldTarget;
         };
-        
+
         fail.OnEnter += a =>
         {
-            _ent.Stop(); 
+            _ent.Stop();
             Debug.Log("Plan failed");
         };
-        
-        success.OnEnter += a => Debug.Log("Success");
-        
 
-        heal.OnEnter += a =>
+        success.OnEnter += a =>
+        {
+            Debug.Log("Success");
+            _ent.Stop();
+            transform.LookAt(acamaraaa.transform);
+            _amimator.SetTrigger("Dance");
+        };
+
+
+    heal.OnEnter += a =>
         {
             _ent.GoTo(_target.transform.position);
             _ent.OnHitItem += Heal;

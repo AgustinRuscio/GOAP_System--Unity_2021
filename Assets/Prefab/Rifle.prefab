@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 7170570385812484348}
   - component: {fileID: 5042425506087618364}
   - component: {fileID: 8239489717324177838}
-  - component: {fileID: 4314787824777479733}
-  - component: {fileID: 2750124031437786775}
   m_Layer: 0
   m_Name: Rifle
   m_TagString: Untagged
@@ -112,32 +110,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 7
---- !u!65 &4314787824777479733
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8683511511901425961}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.020473398, y: 0.0013745601, z: 0.0045529255}
-  m_Center: {x: 0.0021775179, y: 0.000010872491, z: -0.0005824106}
---- !u!54 &2750124031437786775
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8683511511901425961}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
