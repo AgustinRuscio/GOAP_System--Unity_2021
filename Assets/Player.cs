@@ -37,6 +37,8 @@ public class Player : MonoBehaviour
     
     [SerializeField]
     private Animator _amimator;
+    [SerializeField]
+    private AudioSource _source;
 
     public CameraTarget acamaraaa;
     private void PickUp(Entity us, Item other)
@@ -150,6 +152,7 @@ public class Player : MonoBehaviour
             Debug.Log("Success");
             _ent.Stop();
             transform.LookAt(acamaraaa.transform);
+            _source.Play();
             _amimator.SetTrigger("Dance");
         };
 
