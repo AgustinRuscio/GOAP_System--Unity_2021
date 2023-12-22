@@ -6,6 +6,7 @@ using System;
 
 public class Planner : MonoBehaviour 
 {
+	/*
 	private readonly List<Tuple<Vector3, Vector3>> _debugRayList = new List<Tuple<Vector3, Vector3>>();
 
 	private void Start ()
@@ -97,7 +98,7 @@ public class Planner : MonoBehaviour
 			, { "Open"	, ActionEntity.Open }
 		};
 
-		var plan = Goap.Execute(initial,null, objectice, heuristc, actions);
+		var plan = Goap.Execute(initial,null, objectice, heuristc, actions, everything);
 
 		if(plan == null)
 			Debug.Log("Couldn't plan");
@@ -126,7 +127,7 @@ public class Planner : MonoBehaviour
         return new List<GoapAction>()
         {
               new GoapAction("Kill")
-                .SetCost(1f)
+                .SetCost(1f, transform.position)
                 .SetItem(ItemType.Entity)
                 .Pre((gS)=>
                 {
@@ -150,7 +151,7 @@ public class Planner : MonoBehaviour
                 )
 
             , new GoapAction("Loot")
-                .SetCost(1f)
+                .SetCost(1f, transform.position)
                 .SetItem(ItemType.Key)
                 .Pre("otherHas"+ ItemType.Key.ToString(), true)
                 .Pre("dead"+ ItemType.Entity.ToString(), true)
@@ -159,7 +160,7 @@ public class Planner : MonoBehaviour
                 .Effect("otherHas"+ ItemType.Key.ToString(), false)
 
             , new GoapAction("Pickup")
-                .SetCost(2f)
+                .SetCost(2f, transform.position)
                 .SetItem(ItemType.Mace)
                 .Pre("dead"+ ItemType.Mace.ToString(), false)
                 .Pre("otherHas"+ ItemType.Mace.ToString(), false)
@@ -169,7 +170,7 @@ public class Planner : MonoBehaviour
                 .Effect("has"+ ItemType.Mace.ToString(), true)
 
             , new GoapAction("Pickup")
-                .SetCost(2f)
+                .SetCost(2f,transform.position)
                 .SetItem(ItemType.Key)
 //                .Pre("deadKey", false)
 //                .Pre("otherHasKey", false)
@@ -179,7 +180,7 @@ public class Planner : MonoBehaviour
                 .Effect("has"+ ItemType.Key.ToString(), true)
 
             , new GoapAction("Pickup")
-                .SetCost(5f)					//La frola es prioritaria!
+                .SetCost(5f,transform.position)					//La frola es prioritaria!
                 .SetItem(ItemType.PastaFrola)
 				.Pre("dead"+ ItemType.PastaFrola.ToString(), false)
                 .Pre("otherHas"+ ItemType.PastaFrola.ToString(), false)
@@ -190,7 +191,7 @@ public class Planner : MonoBehaviour
                 .Effect("has"+ ItemType.PastaFrola.ToString(), true)
 
             , new GoapAction("Open")
-                .SetCost(3f)
+                .SetCost(3f, transform.position)
                 .SetItem(ItemType.Door)
                 .Pre("dead"+ ItemType.Door.ToString(), false)
                 .Pre("has"+ ItemType.Key.ToString(), true)
@@ -201,7 +202,7 @@ public class Planner : MonoBehaviour
                 .Effect("accessible"+ ItemType.PastaFrola.ToString(), true)
 
                 , new GoapAction("Kill")
-                .SetCost(20f)
+                .SetCost(20f,transform.position)
                 .SetItem(ItemType.Door)
                 .Pre("dead"+ ItemType.Door.ToString(), false)
                 .Pre("has"+ ItemType.Mace.ToString(), true)
@@ -224,5 +225,5 @@ public class Planner : MonoBehaviour
 			Gizmos.DrawRay(t.Item1, (t.Item2-t.Item1).normalized);
 			Gizmos.DrawCube(t.Item2+Vector3.up, Vector3.one*0.2f);
 		}
-	}
+	}*/
 }

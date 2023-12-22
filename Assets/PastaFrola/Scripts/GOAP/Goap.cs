@@ -6,7 +6,7 @@ using System;
 public class Goap : MonoBehaviour
 {
     //El satisfies y la heuristica ahora son Funciones externas
-	public static IEnumerable<GoapAction> Execute(GoapState from, GoapState to, Func<GoapState, bool> satisfies, Func<GoapState, float> h, IEnumerable<GoapAction> actions)
+	public static IEnumerable<GoapAction> Execute(GoapState from, GoapState to, Func<GoapState, bool> satisfies, Func<GoapState, float> h, IEnumerable<GoapAction> actions, IEnumerable<Item> allItems)
     {
         int watchdog = 200;
 
@@ -32,16 +32,20 @@ public class Goap : MonoBehaviour
                               .Aggregate(new FList<AStarNormal<GoapState>.Arc>(), (possibleList, action) =>
                               {
                                   Debug.Log("-----------START-------------------" );
-                                  Debug.Log("Current Action " + action.Name);
+                                  Debug.Log("Current Action " + action.Name + action.item);
                                   Debug.Log("Pre condiciones actuales " + curr);
                                   
                                   
                                   var newState = new GoapState(curr);
-                                  
+
+                                  //Item i2 = allItems.FirstOrDefault(i => i.type == action.item);
+                                  //action.SetTarget(i2.transform.position);
                                   
                                   newState = action.Effects(newState); // se aplican lso effectos del Func
                                   newState.generatingAction = action;
                                   newState.step = curr.step+1;
+
+                                  Debug.Log("Costo de la accion " + newState.generatingAction.Cost);
                                   
                                   Debug.Log("Efectos actuales " + action.Effects(newState));
                                   Debug.Log("-------------NEXT-------------" );
@@ -49,6 +53,7 @@ public class Goap : MonoBehaviour
                               });
             });
 
+        
         if (seq == null)
         {
             Debug.Log("Imposible planear");
@@ -61,6 +66,7 @@ public class Goap : MonoBehaviour
         }
 
 		Debug.Log("WATCHDOG " + watchdog);
+		
 		
 		return seq.Skip(1).Select(x => x.generatingAction);
 	}

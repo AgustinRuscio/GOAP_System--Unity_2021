@@ -3,13 +3,43 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Unity.VisualScripting;
+using UnityEngine.Serialization;
 
 public class Planero : MonoBehaviour 
 {
 	private readonly List<Tuple<Vector3, Vector3>> _debugRayList = new List<Tuple<Vector3, Vector3>>();
 
-	public Transform test;
-	public Weapon wtest;
+
+	[Header("Initial State Variables")]
+	
+	[SerializeField]
+	private int _initialInSightEnemies = 0;
+
+	[SerializeField] 
+	private float _initialMaxLife = 100, _initialLife = 100;
+
+	[SerializeField]
+	private bool _initialIsHealthy = true, 
+		_initialTreasure = false, 
+		_initialHasWeapon = false, 
+		_initialCanEscape = false;
+
+	[Header("Goal State Variables")]
+	[SerializeField]
+	private int _goalInSightEnemies = 0;
+
+	[SerializeField] 
+	private float _goalMaxLife = 100, _goalLife = 100;
+
+	[SerializeField]
+	private bool _goalIsHealthy = true, 
+		_goalTreasure = true, 
+		_goalHasWeapon = true, 
+		_goalCanEscape = false;
+
+
+	private IEnumerable<Item> everything;
 	
 	private void Start ()
     {
@@ -39,7 +69,7 @@ public class Planero : MonoBehaviour
 		var nav = Navigation.instance;//Consigo los items
 		var floorItems = nav.AllItems();
 		var inventory = nav.AllInventories();
-		var everything = nav.AllItems().Union(nav.AllInventories());// .Union() une 2 colecciones sin agregar duplicados(eso incluye duplicados en la misma coleccion)
+		everything = nav.AllItems().Union(nav.AllInventories());// .Union() une 2 colecciones sin agregar duplicados(eso incluye duplicados en la misma coleccion)
 
         //Chequeo los booleanos para cada Item, generando mi modelo de mundo (mi diccionario de bools) en ObservedState
 		Check(observedState, ItemType.Treasure);
@@ -54,20 +84,20 @@ public class Planero : MonoBehaviour
         GoapState initial = new GoapState();
         initial.worldState = new WorldState()
         {
-	        _inSightEnemies = 0,
+	        _inSightEnemies = this._initialInSightEnemies,
 	        
-	        _maxLife = 100,
-	        _life = 100,
-	        _isHealthy = true,
+	        _maxLife = this._initialMaxLife,
+	        _life = this._initialLife,
+	        _isHealthy = this._initialIsHealthy,
 	        
-	        _treasure = false,
-	        _hasWeapon = false,
+	        _treasure = this._initialTreasure,
+	        _hasWeapon = this._initialHasWeapon,
 	        
 	        values = new Dictionary<string, bool>()
         };
 
         initial.worldState.values = observedState; //le asigno los valores actuales, conseguidos antes
-		initial.worldState.values["canEscape"] = false;
+		initial.worldState.values["canEscape"] = this._initialCanEscape;
 		initial.worldState.values["has" + ItemType.WeaponChest.ToString()] = initial.worldState._hasWeapon;
 		initial.worldState.values["has" + ItemType.Treasure.ToString()] = initial.worldState._treasure;
 		initial.worldState.values["isHealthy"] = initial.worldState._life > (initial.worldState._maxLife *.5f);
@@ -93,22 +123,22 @@ public class Planero : MonoBehaviour
         
         goal.worldState = new WorldState()
         {
-			_inSightEnemies = 0,
+			_inSightEnemies = this._goalInSightEnemies,
 			
-			_isHealthy = true,
-			_life = 100,
-			_maxLife = 100,
+			_isHealthy = this._goalIsHealthy,
+			_life = this._goalLife,
+			_maxLife = this._goalMaxLife,
 			
-			_treasure = true,
-			_hasWeapon = true,
+			_treasure = this._goalTreasure,
+			_hasWeapon = this._goalHasWeapon,
 			
 			values = new Dictionary<string, bool>()
         };
         
-        goal.worldState.values["has" + ItemType.WeaponChest.ToString()] = goal.worldState._hasWeapon;
         goal.worldState.values["has" + ItemType.Treasure.ToString()] = goal.worldState._treasure;
+        goal.worldState.values["has" + ItemType.WeaponChest.ToString()] = goal.worldState._hasWeapon;
         goal.worldState.values["isHealthy"] = goal.worldState._life > (goal.worldState._maxLife *.5f);
-        goal.worldState.values["canEscape"] = false;
+        goal.worldState.values["canEscape"] = this._goalCanEscape;
         
         
         //goal.values["has" + ItemType.Key.ToString()] = true;
@@ -121,41 +151,45 @@ public class Planero : MonoBehaviour
         {
             int count = 0;
 
-            if(curr.worldState.values["canEscape"])
+            if(curr.worldState.values["canEscape"] != this._goalCanEscape)
 	            count++;
-           if(!curr.worldState.values["isHealthy"])
+           if(curr.worldState.values["isHealthy"] != _goalIsHealthy)
            		count++;
-           if (!curr.worldState.values["has" + ItemType.Treasure.ToString()])
+           if (curr.worldState.values["has" + ItemType.Treasure.ToString()] != _goalTreasure)
 	           count++;
-           if (!curr.worldState.values["has" + ItemType.WeaponChest.ToString()])
+           if (curr.worldState.values["has" + ItemType.WeaponChest.ToString()] != _goalHasWeapon)
 	           count++;
             
-            //if (curr.worldState._weapon == null
-            //    || curr.worldState._weapon.Rarity == Rarity.normal )
-	            //count++;
             return count;
         };
 
         Func<GoapState, bool> objectice = (curr) =>
         {
-	        return !curr.worldState.values["canEscape"] &&
-	               curr.worldState.values["isHealthy"] &&
-	               curr.worldState.values["has" + ItemType.WeaponChest.ToString()] &&
-	               curr.worldState.values["has" + ItemType.Treasure.ToString()];
+	        return curr.worldState.values["canEscape"] == this._goalCanEscape &&
+	               curr.worldState.values["isHealthy"] == this._goalIsHealthy &&
+	               curr.worldState.values["has" + ItemType.WeaponChest.ToString()] == this._goalHasWeapon &&
+	               curr.worldState.values["has" + ItemType.Treasure.ToString()] == this._goalTreasure;
         };
         
         var actDict = new Dictionary<string, Actions>() {
 			  { "Escape", Actions.Escape }
-			, { "PickUp", Actions.PickUp }
+			, { "PickUpWeapon", Actions.PickUp }
+			, { "PickUpTreasure", Actions.PickUp }
 			, { "Fight"	, Actions.Fight }
 			, { "Heal"	, Actions.Heal }
 		};
         
-		var plan = Goap.Execute(initial,goal, objectice, heuristc, actions);
+		var plan = Goap.Execute(initial,goal, objectice, heuristc, actions, everything);
 
+		
+		
 		if(plan == null)
 			Debug.Log("Couldn't plan");
 		else {
+			
+		//	Debug.Log("Primra accion" + plan.First().Name + plan.First().item  + plan.First().Cost+ " -------------------------------------------------------------------------------------");
+		//	Debug.Log("Primra accion" + plan.Skip(2).First().Name + plan.Skip(2).First().item  + plan.Skip(2).First().Cost+ " -------------------------------------------------------------------------------------");
+			
 			GetComponent<Player>().ExecutePlan(
 				plan
 				.Select(a => 
@@ -172,22 +206,25 @@ public class Planero : MonoBehaviour
 				}).Where(a => a != null)
 				.ToList()
 			);
+
+			
+			
+			int cervecera = 0;
+			foreach (var VARIABLE in plan)
+			{
+				cervecera++;
+				Debug.Log(cervecera + VARIABLE.Name + VARIABLE.item);
+			}
 		}
 	}
-    
-    //private bool IsRarityOkey(GoapState state)
-    //{
-	//    return state.worldState._weapon != null &&
-	//           state.worldState._weapon.Rarity != Rarity.normal;
-    //}
     
     private List<GoapAction> CreatePossibleActionsList()
     {
 	     return new List<GoapAction>()
 	     {
 	          new GoapAction("Fight")
-		          .SetCost(5f)
 		          .SetItem(ItemType.Entity)
+		          .SetCost(5f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Entity).transform.position)
 		          .Pre((gs) =>
 		          {
 			          return gs.worldState._inSightEnemies == 1 &&
@@ -222,8 +259,8 @@ public class Planero : MonoBehaviour
 		          })
 	          ,
 	          new GoapAction("Escape")
-	          .SetCost(4f)
 	          .SetItem(ItemType.Escape)
+	          .SetCost(4f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Escape).transform.position)
 	          .Pre((gs) =>
 	          {
 		          return gs.worldState._inSightEnemies > 0 &&
@@ -237,37 +274,10 @@ public class Planero : MonoBehaviour
 		          return gs; 
 	          })
 	          
-	         , new GoapAction("PickUp") //Tesoro
-	             .SetCost(3f)
-	             .SetItem(ItemType.Treasure)
-	             .Pre(gs =>
-	             {
-		             return gs.worldState._inSightEnemies == 0 &&
-		                    gs.worldState.values.ContainsKey("canEscape") &&
-		                    !gs.worldState.values["canEscape"] &&
-		                    
-		                    gs.worldState.values.ContainsKey("accessible" + ItemType.Treasure.ToString()) &&
-		                    gs.worldState.values["accessible" + ItemType.Treasure.ToString()] &&
-		                    
-		                    !gs.worldState._treasure &&
-		                    gs.worldState.values.ContainsKey("has" + ItemType.Treasure.ToString()) &&
-							!gs.worldState.values["has" + ItemType.Treasure.ToString()];
-	             })
-	             .Effect(gs =>
-	             {
-		             gs.worldState._treasure = true;
-		             gs.worldState.values["has" + ItemType.Treasure.ToString()] = gs.worldState._treasure;
-		             gs.worldState.values["accessible" + ItemType.Treasure.ToString()] = false;
-			             
-		             gs.worldState._inSightEnemies = 2;
-		             gs.worldState.values["canEscape"] = true;
-		             
-		             return gs;
-	             })
-
-	         , new GoapAction("PickUp") //Weapon
-	             .SetCost(2f)
+	         
+	         , new GoapAction("PickUpWeapon") //Weapon
 	             .SetItem(ItemType.WeaponChest)
+	             .SetCost(2f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.WeaponChest).transform.position)
 	             .Pre(gs =>
 	             {
 		             return gs.worldState._inSightEnemies == 0 &&
@@ -291,10 +301,37 @@ public class Planero : MonoBehaviour
 		             gs.worldState.values["canEscape"] = true;
 		             return gs;
 	             })
+	         , new GoapAction("PickUpTreasure") //Tesoro
+		         .SetItem(ItemType.Treasure)
+		         .SetCost(3f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Treasure).transform.position)
+		         .Pre(gs =>
+		         {
+			         return gs.worldState._inSightEnemies == 0 &&
+			                gs.worldState.values.ContainsKey("canEscape") &&
+			                !gs.worldState.values["canEscape"] &&
+		                    
+			                gs.worldState.values.ContainsKey("accessible" + ItemType.Treasure.ToString()) &&
+			                gs.worldState.values["accessible" + ItemType.Treasure.ToString()] &&
+		                    
+			                !gs.worldState._treasure &&
+			                gs.worldState.values.ContainsKey("has" + ItemType.Treasure.ToString()) &&
+			                !gs.worldState.values["has" + ItemType.Treasure.ToString()];
+		         })
+		         .Effect(gs =>
+		         {
+			         gs.worldState._treasure = true;
+			         gs.worldState.values["has" + ItemType.Treasure.ToString()] = gs.worldState._treasure;
+			         gs.worldState.values["accessible" + ItemType.Treasure.ToString()] = false;
+			             
+			         gs.worldState._inSightEnemies = 2;
+			         gs.worldState.values["canEscape"] = true;
+		             
+			         return gs;
+		         })
 
 	         , new GoapAction("Heal")
-	             .SetCost(5f)
 	             .SetItem(ItemType.Heal)
+	             .SetCost(5f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Heal).transform.position)
 	             .Pre(gs =>
 	             {
 		             return gs.worldState._inSightEnemies == 0 &&

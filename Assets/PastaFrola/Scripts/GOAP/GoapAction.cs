@@ -15,6 +15,8 @@ public class GoapAction
 
     public Func<GoapState, GoapState> Effects;
 
+    private Vector3 _target;
+    
     public float Cost { get; private set; }
 
     public ItemType item;
@@ -24,7 +26,7 @@ public class GoapAction
     {
 
         this.Name = name;
-        Cost = 1f;
+        //Cost = 1f;
         preconditions = new Dictionary<string, bool>();
         effects = new Dictionary<string, bool>();
 
@@ -39,13 +41,26 @@ public class GoapAction
         };
     }
 
-    public GoapAction SetCost(float cost)
+    public GoapAction SetTarget(Vector3 newTarget)
+    {
+        _target = newTarget;
+        return this;
+    }
+
+    public GoapAction SetCost(float cost, Vector3 pos  , Vector3 target)
     {
         if (cost < 1f)
         {
             Debug.Log(string.Format("Warning: Using cost < 1f for '{0}' could yield sub-optimal results", Name));
         }
-        this.Cost = cost;
+
+        
+        var dist = Vector3.Distance(target, pos);
+
+        var finalCost = cost + dist;
+
+        this.Cost = finalCost;
+        Debug.Log(Cost +"  " + Name + "  " + item);
         return this;
     }
     public GoapAction Pre(string s, bool value)

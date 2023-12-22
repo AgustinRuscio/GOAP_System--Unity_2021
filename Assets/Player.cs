@@ -194,8 +194,6 @@ public class Player : MonoBehaviour
 
         escape.OnUpdate += () =>
         {
-            Debug.Log("Hiding");
-            
             if (Vector3.Distance(transform.position, _target.transform.position) <= 2f)
                 _fsm.Feed(Actions.NextStep);
         };
