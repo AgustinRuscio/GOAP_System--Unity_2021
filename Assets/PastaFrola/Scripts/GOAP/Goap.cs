@@ -45,6 +45,21 @@ public class Goap : MonoBehaviour
                                   newState.generatingAction = action;
                                   newState.step = curr.step+1;
 
+
+
+                                  if (action.Name == "Heal")
+                                  {
+                                      Debug.Log("Viiiiiiiiiiiiiiiiiiirrrrrrrrrrrrrrrrrrrrrrrrgennnnnnnnnnnnnnnnn");
+                                      Debug.Log(curr.worldState._life);
+                                      Debug.Log(curr.worldState._maxLife);
+                                      Debug.Log(curr.worldState._isHealthy);
+                                      Debug.Log(curr.worldState.values["isHealthy"]);
+                                      
+                                      Debug.Log(action.Effects(newState));
+                                  }
+                                  
+                                  
+
                                   Debug.Log("Costo de la accion " + newState.generatingAction.Cost);
                                   
                                   Debug.Log("Efectos actuales " + action.Effects(newState));

@@ -20707,6 +20707,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
+      propertyPath: _goalCanEscape
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: _goalHasWeapon
       value: 1
       objectReference: {fileID: 0}
@@ -20715,8 +20719,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
+      propertyPath: _initialTreasure
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
+      propertyPath: _initialHasWeapon
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: _initialIsHealthy
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
+      propertyPath: _goalInSightEnemies
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: _pickUptreasureCost

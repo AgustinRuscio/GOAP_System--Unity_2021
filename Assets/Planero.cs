@@ -353,7 +353,9 @@ public class Planero : MonoBehaviour
 	             {
 		             gs.worldState._life = gs.worldState._maxLife;
 		             gs.worldState._isHealthy = gs.worldState._life > (gs.worldState._maxLife *.5f);
-		             gs.worldState.values["isHealthy"] = gs.worldState._life > (gs.worldState._maxLife *.5f);
+		             gs.worldState.values["isHealthy"] = true;
+		             
+		             Debug.Log("Life: " + gs.worldState._life + " - MaxLife: " + gs.worldState._maxLife + " MAMAHUEBOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooo");
 		             
 		             return gs;
 	             })
