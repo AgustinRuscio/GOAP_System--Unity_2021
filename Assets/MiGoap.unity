@@ -20718,13 +20718,17 @@ PrefabInstance:
       propertyPath: _initialIsHealthy
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
+      propertyPath: _pickUptreasureCost
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3464997203919548324, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3464997203919548324, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.95
+      value: 7.995
       objectReference: {fileID: 0}
     - target: {fileID: 3464997203919548324, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -20732,7 +20736,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3464997203919548324, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.29
+      value: -2.69
       objectReference: {fileID: 0}
     - target: {fileID: 3464997203919548324, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: m_LocalRotation.w

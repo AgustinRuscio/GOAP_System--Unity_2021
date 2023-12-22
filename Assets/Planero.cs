@@ -38,6 +38,10 @@ public class Planero : MonoBehaviour
 		_goalHasWeapon = true, 
 		_goalCanEscape = false;
 
+	[Header("Actions Cost")] [SerializeField]
+	private float _pickUpWeaponCost = 2, _pickUpTreasureCost = 3, 
+		_fightCost = 5, _healCost = 5,
+		_escapeCost = 4;
 
 	private IEnumerable<Item> everything;
 	
@@ -224,7 +228,7 @@ public class Planero : MonoBehaviour
 	     {
 	          new GoapAction("Fight")
 		          .SetItem(ItemType.Entity)
-		          .SetCost(5f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Entity).transform.position)
+		          .SetCost(_fightCost, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Entity).transform.position)
 		          .Pre((gs) =>
 		          {
 			          return gs.worldState._inSightEnemies == 1 &&
@@ -260,7 +264,7 @@ public class Planero : MonoBehaviour
 	          ,
 	          new GoapAction("Escape")
 	          .SetItem(ItemType.Escape)
-	          .SetCost(4f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Escape).transform.position)
+	          .SetCost(_escapeCost, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Escape).transform.position)
 	          .Pre((gs) =>
 	          {
 		          return gs.worldState._inSightEnemies > 0 &&
@@ -277,7 +281,7 @@ public class Planero : MonoBehaviour
 	         
 	         , new GoapAction("PickUpWeapon") //Weapon
 	             .SetItem(ItemType.WeaponChest)
-	             .SetCost(2f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.WeaponChest).transform.position)
+	             .SetCost(_pickUpWeaponCost, transform.position, everything.FirstOrDefault(i => i.type == ItemType.WeaponChest).transform.position)
 	             .Pre(gs =>
 	             {
 		             return gs.worldState._inSightEnemies == 0 &&
@@ -303,7 +307,7 @@ public class Planero : MonoBehaviour
 	             })
 	         , new GoapAction("PickUpTreasure") //Tesoro
 		         .SetItem(ItemType.Treasure)
-		         .SetCost(3f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Treasure).transform.position)
+		         .SetCost(_pickUpTreasureCost, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Treasure).transform.position)
 		         .Pre(gs =>
 		         {
 			         return gs.worldState._inSightEnemies == 0 &&
@@ -331,7 +335,7 @@ public class Planero : MonoBehaviour
 
 	         , new GoapAction("Heal")
 	             .SetItem(ItemType.Heal)
-	             .SetCost(5f, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Heal).transform.position)
+	             .SetCost(_healCost, transform.position, everything.FirstOrDefault(i => i.type == ItemType.Heal).transform.position)
 	             .Pre(gs =>
 	             {
 		             return gs.worldState._inSightEnemies == 0 &&
