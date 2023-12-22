@@ -249,9 +249,9 @@ public class Planero : MonoBehaviour
 			          gs.worldState._inSightEnemies = 0;
 			          gs.worldState.values["canEscape"] = gs.worldState._inSightEnemies == 0; 
 			          
-			          gs.worldState._life = gs.worldState._maxLife * .3f;
-			          gs.worldState._isHealthy =  gs.worldState._life > (gs.worldState._maxLife *.5f);
-			          gs.worldState.values["isHealthy"] = gs.worldState._life > (gs.worldState._maxLife *.5f);
+			          gs.worldState._life = 30;
+			          gs.worldState._isHealthy =  gs.worldState._life > 100;
+			          gs.worldState.values["isHealthy"] = false;
 			          
 			          gs.worldState.values["dead" + ItemType.Entity.ToString()] = true;
 			          gs.worldState.values["accessible" + ItemType.Entity.ToString()] = false;
@@ -342,7 +342,7 @@ public class Planero : MonoBehaviour
 		                    gs.worldState.values.ContainsKey("canEscape") &&
 		                    !gs.worldState.values["canEscape"] &&
 		                    
-		                    gs.worldState._life < gs.worldState._maxLife &&
+		                    gs.worldState._life < 51 &&
 		                    !gs.worldState._isHealthy &&
 		                    !gs.worldState.values["isHealthy"] &&
 		                    
@@ -351,8 +351,8 @@ public class Planero : MonoBehaviour
 	             })
 	             .Effect(gs =>
 	             {
-		             gs.worldState._life = gs.worldState._maxLife;
-		             gs.worldState._isHealthy = gs.worldState._life > (gs.worldState._maxLife *.5f);
+		             gs.worldState._life = 100;
+		             gs.worldState._isHealthy = gs.worldState._life > 51;
 		             gs.worldState.values["isHealthy"] = true;
 		             
 		             Debug.Log("Life: " + gs.worldState._life + " - MaxLife: " + gs.worldState._maxLife + " MAMAHUEBOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooo");

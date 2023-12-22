@@ -218,7 +218,7 @@ public class Entity : MonoBehaviour
 			if(path != null) {
 				foreach(var next in path.Select(w => FloorPos(w))) {
 
-					while((next - FloorPos(this)).sqrMagnitude >= 0.05f) {
+					while((next - FloorPos(this)).sqrMagnitude >= 0.1f) {
 						_vel = (next - FloorPos(this)).normalized;
 						yield return null;
 					}
@@ -231,7 +231,7 @@ public class Entity : MonoBehaviour
 
 		if(reachedDst == dstWp) {
 			_vel = (FloorPos(destination) - FloorPos(this)).normalized;
-			yield return new WaitUntil(() => (FloorPos(destination) - FloorPos(this)).sqrMagnitude < 0.05f);
+			yield return new WaitUntil(() => (FloorPos(destination) - FloorPos(this)).sqrMagnitude < 0.1f);
 		}
 		
 		_vel = Vector3.zero;

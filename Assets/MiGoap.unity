@@ -14377,7 +14377,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1592226353
 GameObject:
@@ -20699,6 +20699,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
+      propertyPath: _goalLife
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: _initialLife
       value: 100
       objectReference: {fileID: 0}
@@ -20723,6 +20727,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
+      propertyPath: _initialCanEscape
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: _initialHasWeapon
       value: 0
       objectReference: {fileID: 0}
@@ -20737,6 +20745,10 @@ PrefabInstance:
     - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: _pickUptreasureCost
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 364749536, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
+      propertyPath: _initialInSightEnemies
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3464997203919548324, guid: 59633204f97922c4fa15b974ef638ab5, type: 3}
       propertyPath: m_RootOrder
@@ -20881,7 +20893,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5001524810721834256, guid: 558d8c51cadca5f449f5ac53c3ba5ad3, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5001524810721834256, guid: 558d8c51cadca5f449f5ac53c3ba5ad3, type: 3}
       propertyPath: m_LocalPosition.x
